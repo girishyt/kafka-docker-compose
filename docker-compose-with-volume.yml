@@ -1,11 +1,11 @@
 ---
 version: '2'
 volumes:
-  zksingle-ksingle_broker-data:
-  zksingle-ksingle_broker-secrets:
-  zksingle-ksingle_zoo1-data:
-  zksingle-ksingle_zoo1-log:
-  zksingle-ksingle_zoo1-secrets:
+  omc-kafka_zksingle-ksingle_broker-data:
+  omc-kafka_zksingle-ksingle_broker-secrets:
+  omc-kafka_zksingle-ksingle_zoo1-data:
+  omc-kafka_zksingle-ksingle_zoo1-log:
+  omc-kafka_zksingle-ksingle_zoo1-secrets:
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.0
@@ -18,13 +18,13 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     volumes:
     - type: volume
-      source: zksingle-ksingle_zoo1-data
+      source: omc-kafka_zksingle-ksingle_zoo1-data
       target: /var/lib/zookeeper/data
     - type: volume
-      source: zksingle-ksingle_zoo1-log
+      source: omc-kafka_zksingle-ksingle_zoo1-log
       target: /var/lib/zookeeper/log
     - type: volume
-      source: zksingle-ksingle_zoo1-secrets
+      source: omc-kafka_zksingle-ksingle_zoo1-secrets
       target: /etc/zookeeper/secrets
 
   broker:
@@ -57,10 +57,10 @@ services:
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
     volumes:
     - type: volume
-      source: zksingle-ksingle_broker-data
+      source: omc-kafka_zksingle-ksingle_broker-data
       target: /var/lib/kafka/data
     - type: volume
-      source: zksingle-ksingle_broker-secrets
+      source: omc-kafka_zksingle-ksingle_broker-secrets
       target: /etc/kafka/secrets
 
   schema-registry:
