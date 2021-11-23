@@ -1,5 +1,11 @@
 ---
 version: '2'
+volumes:
+  zksingle-ksingle_broker-data:
+  zksingle-ksingle_broker-secrets:
+  zksingle-ksingle_zoo1-data:
+  zksingle-ksingle_zoo1-log:
+  zksingle-ksingle_zoo1-secrets:
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.0
@@ -10,6 +16,16 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+    - type: volume
+      source: zksingle-ksingle_zoo1-data
+      target: /var/lib/zookeeper/data
+    - type: volume
+      source: zksingle-ksingle_zoo1-log
+      target: /var/lib/zookeeper/log
+    - type: volume
+      source: zksingle-ksingle_zoo1-secrets
+      target: /etc/zookeeper/secrets
 
   broker:
     image: confluentinc/cp-server:7.0.0
@@ -39,6 +55,13 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+    volumes:
+    - type: volume
+      source: zksingle-ksingle_broker-data
+      target: /var/lib/kafka/data
+    - type: volume
+      source: zksingle-ksingle_broker-secrets
+      target: /etc/kafka/secrets
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.0.0
