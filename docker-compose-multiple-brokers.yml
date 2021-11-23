@@ -1,12 +1,12 @@
 version: '2'
 volumes:
-  zksingle-ksingle_broker1-data:
-  zksingle-ksingle_broker1-secrets:
-  zksingle-ksingle_broker2-data:
-  zksingle-ksingle_broker2-secrets:
-  zksingle-ksingle_zookeeper-data:
-  zksingle-ksingle_zookeeper-log:
-  zksingle-ksingle_zookeeper-secrets:
+  broker1-data:
+  broker1-secrets:
+  broker2-data:
+  broker2-secrets:
+  zookeeper-data:
+  zookeeper-log:
+  zookeeper-secrets:
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -17,13 +17,13 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     volumes:
     - type: volume
-      source: zksingle-ksingle_zookeeper-data
+      source: zookeeper-data
       target: /var/lib/zookeeper/data
     - type: volume
-      source: zksingle-ksingle_zookeeper-log
+      source: zookeeper-log
       target: /var/lib/zookeeper/log
     - type: volume
-      source: zksingle-ksingle_zookeeper-secrets
+      source: zookeeper-secrets
       target: /etc/zookeeper/secrets
 
   broker1:
@@ -43,10 +43,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
     - type: volume
-      source: zksingle-ksingle_broker1-data
+      source: broker1-data
       target: /var/lib/kafka/data
     - type: volume
-      source: zksingle-ksingle_broker1-secrets
+      source: broker1-secrets
       target: /etc/kafka/secrets
       
   broker2:
@@ -66,8 +66,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
     - type: volume
-      source: zksingle-ksingle_broker2-data
+      source: broker2-data
       target: /var/lib/kafka/data
     - type: volume
-      source: zksingle-ksingle_broker2-secrets
+      source: broker2-secrets
       target: /etc/kafka/secrets
