@@ -8,6 +8,8 @@ volumes:
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper
+    container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -41,6 +43,8 @@ services:
     # "`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-
     #
     image: confluentinc/cp-kafka:latest
+    hostname: kafka
+    container_name: kafka
     depends_on:
       - zookeeper
     ports:
