@@ -59,6 +59,7 @@ services:
     container_name: broker2
     depends_on:
       - zookeeper
+      - broker1
     ports:
       - 9093:9093
     environment:
@@ -82,6 +83,7 @@ services:
     container_name: broker3
     depends_on:
       - zookeeper
+      - broker2
     ports:
       - 9094:9094
     environment:
