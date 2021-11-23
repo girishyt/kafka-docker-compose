@@ -1,0 +1,73 @@
+version: '2'
+volumes:
+  zksingle-ksingle_broker1-data:
+  zksingle-ksingle_broker1-secrets:
+  zksingle-ksingle_broker2-data:
+  zksingle-ksingle_broker2-secrets:
+  zksingle-ksingle_zookeeper-data:
+  zksingle-ksingle_zookeeper-log:
+  zksingle-ksingle_zookeeper-secrets:
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+    - type: volume
+      source: zksingle-ksingle_zookeeper-data
+      target: /var/lib/zookeeper/data
+    - type: volume
+      source: zksingle-ksingle_zookeeper-log
+      target: /var/lib/zookeeper/log
+    - type: volume
+      source: zksingle-ksingle_zookeeper-secrets
+      target: /etc/zookeeper/secrets
+
+  broker1:
+    image: confluentinc/cp-kafka:latest
+    hostname: broker1
+    container_name: broker1
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://10.124.17.151:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+    - type: volume
+      source: zksingle-ksingle_broker1-data
+      target: /var/lib/kafka/data
+    - type: volume
+      source: zksingle-ksingle_broker1-secrets
+      target: /etc/kafka/secrets
+      
+  broker2:
+    image: confluentinc/cp-kafka:latest
+    hostname: broker2
+    container_name: broker2
+    depends_on:
+      - zookeeper
+    ports:
+      - 9093:9093
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29093,PLAINTEXT_HOST://10.124.17.151:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+    - type: volume
+      source: zksingle-ksingle_broker2-data
+      target: /var/lib/kafka/data
+    - type: volume
+      source: zksingle-ksingle_broker2-secrets
+      target: /etc/kafka/secrets
