@@ -1,10 +1,26 @@
 version: '2'
+volumes:
+  omc-kafka_zksingle-ksingle_broker-data:
+  omc-kafka_zksingle-ksingle_broker-secrets:
+  omc-kafka_zksingle-ksingle_zoo1-data:
+  omc-kafka_zksingle-ksingle_zoo1-log:
+  omc-kafka_zksingle-ksingle_zoo1-secrets:
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+    - type: volume
+      source: omc-kafka_zksingle-ksingle_zoo1-data
+      target: /var/lib/zookeeper/data
+    - type: volume
+      source: omc-kafka_zksingle-ksingle_zoo1-log
+      target: /var/lib/zookeeper/log
+    - type: volume
+      source: omc-kafka_zksingle-ksingle_zoo1-secrets
+      target: /etc/zookeeper/secrets
 
   kafka:
     # "`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-
@@ -36,3 +52,10 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+    - type: volume
+      source: omc-kafka_zksingle-ksingle_broker-data
+      target: /var/lib/kafka/data
+    - type: volume
+      source: omc-kafka_zksingle-ksingle_broker-secrets
+      target: /etc/kafka/secrets
