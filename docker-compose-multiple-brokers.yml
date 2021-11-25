@@ -7,7 +7,7 @@ volumes:
   broker3-data:
   broker3-secrets:
   zookeeper-data:
-  zookeeper-log:
+  #zookeeper-log:
   zookeeper-secrets:
 services:
   zookeeper:
@@ -21,9 +21,9 @@ services:
     - type: volume
       source: zookeeper-data
       target: /var/lib/zookeeper/data
-    - type: volume
-      source: zookeeper-log
-      target: /var/lib/zookeeper/log
+#     - type: volume
+#       source: zookeeper-log
+#       target: /var/lib/zookeeper/log
     - type: volume
       source: zookeeper-secrets
       target: /etc/zookeeper/secrets
