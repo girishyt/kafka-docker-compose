@@ -1,14 +1,4 @@
 version: '2'
-volumes:
-  broker1-data:
-  broker1-secrets:
-  broker2-data:
-  broker2-secrets:
-  broker3-data:
-  broker3-secrets:
-  zookeeper-data:
-  #zookeeper-log:
-  zookeeper-secrets:
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -18,15 +8,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     volumes:
-    - type: volume
-      source: zookeeper-data
-      target: /var/lib/zookeeper/data
-#     - type: volume
-#       source: zookeeper-log
-#       target: /var/lib/zookeeper/log
-    - type: volume
-      source: zookeeper-secrets
-      target: /etc/zookeeper/secrets
+    - /var/kafka-data/zk/data:/var/lib/zookeeper/data
+    - /var/kafka-data/zk/logs:/var/lib/zookeeper/log
 
   broker1:
     image: confluentinc/cp-kafka:latest
@@ -44,12 +27,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
     volumes:
-    - type: volume
-      source: broker1-data
-      target: /var/lib/kafka/data
-    - type: volume
-      source: broker1-secrets
-      target: /etc/kafka/secrets
+    - /var/kafka-data/broker1/data:/var/lib/kafka/data
       
   broker2:
     image: confluentinc/cp-kafka:latest
@@ -68,12 +46,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
     volumes:
-    - type: volume
-      source: broker2-data
-      target: /var/lib/kafka/data
-    - type: volume
-      source: broker2-secrets
-      target: /etc/kafka/secrets
+    - /var/kafka-data/broker2/data:/var/lib/kafka/data
 
   broker3:
     image: confluentinc/cp-kafka:latest
@@ -92,9 +65,4 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
     volumes:
-    - type: volume
-      source: broker3-data
-      target: /var/lib/kafka/data
-    - type: volume
-      source: broker3-secrets
-      target: /etc/kafka/secrets
+    - /var/kafka-data/broker3/data:/var/lib/kafka/data
