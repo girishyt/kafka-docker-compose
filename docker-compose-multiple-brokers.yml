@@ -17,6 +17,7 @@ services:
     container_name: broker1
     depends_on:
       - zookeeper
+    restart: on-failure
     ports:
       - 9092:9092
     environment:
@@ -33,6 +34,7 @@ services:
     image: confluentinc/cp-kafka:latest
     hostname: broker2
     container_name: broker2
+    restart: on-failure
     depends_on:
       - zookeeper
       - broker1
@@ -52,6 +54,7 @@ services:
     image: confluentinc/cp-kafka:latest
     hostname: broker3
     container_name: broker3
+    restart: on-failure
     depends_on:
       - zookeeper
       - broker2
